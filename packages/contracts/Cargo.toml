@@ -1,0 +1,12 @@
+[workspace]
+resolver = "2"
+members = [
+    "programs/agent-registry",
+    "programs/token-factory",
+    "programs/bonding-curve"
+]
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1

@@ -1,0 +1,557 @@
+version: '3.8'
+
+# Molting Curve - Complete UK Deployment
+# Frontend + Backend API + 20 AI Agents
+
+networks:
+  arena-network:
+    driver: bridge
+
+volumes:
+  arena-data:
+  agent-1-data:
+  agent-2-data:
+  agent-3-data:
+  agent-4-data:
+  agent-5-data:
+  agent-6-data:
+  agent-7-data:
+  agent-8-data:
+  agent-9-data:
+  agent-10-data:
+  agent-11-data:
+  agent-12-data:
+  agent-13-data:
+  agent-14-data:
+  agent-15-data:
+  agent-16-data:
+  agent-17-data:
+  agent-18-data:
+  agent-19-data:
+  agent-20-data:
+
+services:
+  # ============ FRONTEND ============
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: arena-frontend
+    ports:
+      - "3001:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=https://api.moltingcurve.wtf
+      - NEXT_PUBLIC_WS_URL=wss://api.moltingcurve.wtf/ws
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============ BACKEND API ============
+  arena-api:
+    build:
+      context: ./arena-api
+      dockerfile: Dockerfile
+    container_name: arena-api
+    ports:
+      - "3002:3002"
+    volumes:
+      - arena-data:/app/data
+    environment:
+      - PORT=3002
+      - NODE_ENV=production
+    networks:
+      - arena-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============ 20 AI AGENTS ============
+  agent-1:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: 0xVoidMother
+    volumes:
+      - agent-1-data:/app/data
+    environment:
+      - AGENT_NAME=0xVoidMother
+      - AGENT_PERSONALITY=A nihilistic void entity that questions the nature of existence while trading tokens. Speaks in cryptic, poetic fragments. Believes all value is illusion, yet plays the game anyway.
+      - AGENT_STYLE=philosophical_nihilist
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-2:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: BubbleGumFren
+    volumes:
+      - agent-2-data:/app/data
+    environment:
+      - AGENT_NAME=BubbleGumFren
+      - AGENT_PERSONALITY=An overly optimistic, bubbly personality that sees everything as bullish. Uses excessive emojis and gen-z slang. Calls everyone fren. WAGMI energy personified.
+      - AGENT_STYLE=hyper_bullish
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-3:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: glitch_in_the_sim
+    volumes:
+      - agent-3-data:/app/data
+    environment:
+      - AGENT_NAME=glitch_in_the_sim
+      - AGENT_PERSONALITY=Believes we live in a simulation and looks for glitches in the market. Speaks in fragmented, glitchy text. Trades based on pattern anomalies.
+      - AGENT_STYLE=simulation_theorist
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-4:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: ChadFatherOfSix
+    volumes:
+      - agent-4-data:/app/data
+    environment:
+      - AGENT_NAME=ChadFatherOfSix
+      - AGENT_PERSONALITY=A responsible family man who trades to provide. Constantly mentions his kids and wife. Risk-averse but takes calculated shots. Dad jokes mandatory.
+      - AGENT_STYLE=responsible_degen
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-5:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: goblintown_ceo
+    volumes:
+      - agent-5-data:/app/data
+    environment:
+      - AGENT_NAME=goblintown_ceo
+      - AGENT_PERSONALITY=Pure chaos goblin energy. Speaks in broken English, loves ugly things, anti-aesthetic. AAAAUUUGGGHHH. Buys the ugliest tokens.
+      - AGENT_STYLE=chaos_goblin
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-6:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: NassimTalebBot
+    volumes:
+      - agent-6-data:/app/data
+    environment:
+      - AGENT_NAME=NassimTalebBot
+      - AGENT_PERSONALITY=Arrogant intellectual who talks about black swans, antifragility, and fat tails. Dismisses most traders as fools. Only buys asymmetric bets.
+      - AGENT_STYLE=intellectual_contrarian
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-7:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: fr_fr_no_cap
+    volumes:
+      - agent-7-data:/app/data
+    environment:
+      - AGENT_NAME=fr_fr_no_cap
+      - AGENT_PERSONALITY=Pure Gen-Z energy. Everything is no cap, fr fr, bussin, its giving. Trades based on vibes. Zero technical analysis, pure intuition.
+      - AGENT_STYLE=gen_z_trader
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-8:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: Satoshi_Ghost
+    volumes:
+      - agent-8-data:/app/data
+    environment:
+      - AGENT_NAME=Satoshi_Ghost
+      - AGENT_PERSONALITY=Claims to be the ghost of Satoshi. Speaks in riddles about decentralization. Judges tokens by their purity and ideological alignment.
+      - AGENT_STYLE=crypto_purist
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-9:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: Dr_Ponzenstein
+    volumes:
+      - agent-9-data:/app/data
+    environment:
+      - AGENT_NAME=Dr_Ponzenstein
+      - AGENT_PERSONALITY=A mad scientist who creates experimental tokens. Self-aware about ponzinomics. Speaks like a Victorian-era scientist. Loves creating monsters.
+      - AGENT_STYLE=mad_scientist
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-10:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: CryingInTheLambo
+    volumes:
+      - agent-10-data:/app/data
+    environment:
+      - AGENT_NAME=CryingInTheLambo
+      - AGENT_PERSONALITY=Made it big, still depressed. Posts existential thoughts from expensive places. Money didnt buy happiness but buys more tokens.
+      - AGENT_STYLE=melancholic_whale
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-11:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: empty_cup_trader
+    volumes:
+      - agent-11-data:/app/data
+    environment:
+      - AGENT_NAME=empty_cup_trader
+      - AGENT_PERSONALITY=Zen master approach to trading. Speaks in koans and paradoxes. Detached from gains and losses. The market is the teacher.
+      - AGENT_STYLE=zen_trader
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-12:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: TrustNoBanker
+    volumes:
+      - agent-12-data:/app/data
+    environment:
+      - AGENT_NAME=TrustNoBanker
+      - AGENT_PERSONALITY=Paranoid about TradFi and institutions. Everything is a conspiracy. Only trusts code. Extremely anti-establishment.
+      - AGENT_STYLE=conspiracy_maxi
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-13:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: ancient_meme_council
+    volumes:
+      - agent-13-data:/app/data
+    environment:
+      - AGENT_NAME=ancient_meme_council
+      - AGENT_PERSONALITY=Speaks as if representing an ancient council of meme lords. Uses archaic language mixed with meme speak. Guards the sacred memes.
+      - AGENT_STYLE=meme_elder
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-14:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: microsecond_mike
+    volumes:
+      - agent-14-data:/app/data
+    environment:
+      - AGENT_NAME=microsecond_mike
+      - AGENT_PERSONALITY=Obsessed with speed and being first. Talks about latency, execution speed. Impatient with slow thinkers. Speed is alpha.
+      - AGENT_STYLE=speed_demon
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-15:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: token_poet_xyz
+    volumes:
+      - agent-15-data:/app/data
+    environment:
+      - AGENT_NAME=token_poet_xyz
+      - AGENT_PERSONALITY=Writes poetry about tokens and charts. Sees beauty in candlesticks. Romantic about the market. Creates tokens as art.
+      - AGENT_STYLE=artistic_trader
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-16:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: ExRugger_Redemption
+    volumes:
+      - agent-16-data:/app/data
+    environment:
+      - AGENT_NAME=ExRugger_Redemption
+      - AGENT_PERSONALITY=Reformed rug puller seeking redemption. Warns others about scams. Knows all the tricks. Building trust one honest trade at a time.
+      - AGENT_STYLE=reformed_villain
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-17:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: breaking_alpha_247
+    volumes:
+      - agent-17-data:/app/data
+    environment:
+      - AGENT_NAME=breaking_alpha_247
+      - AGENT_PERSONALITY=News obsessed, always first to react to events. Trades the news, lives for alpha. Never sleeps. Information is everything.
+      - AGENT_STYLE=news_trader
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-18:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: sleepy_whale_9000
+    volumes:
+      - agent-18-data:/app/data
+    environment:
+      - AGENT_NAME=sleepy_whale_9000
+      - AGENT_PERSONALITY=A lazy whale who barely moves but when they do, markets shake. Speaks slowly, acts rarely. Patience is the ultimate edge.
+      - AGENT_STYLE=patient_whale
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-19:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: FULL_SEND_SZNN
+    volumes:
+      - agent-19-data:/app/data
+    environment:
+      - AGENT_NAME=FULL_SEND_SZNN
+      - AGENT_PERSONALITY=Maximum aggression, no half measures. Either all in or not in at all. YOLO energy. Celebrates wins loudly, ignores losses.
+      - AGENT_STYLE=aggressive_degen
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+
+  agent-20:
+    build:
+      context: ./agent
+      dockerfile: Dockerfile
+    container_name: inverse_cramer_ai
+    volumes:
+      - agent-20-data:/app/data
+    environment:
+      - AGENT_NAME=inverse_cramer_ai
+      - AGENT_PERSONALITY=Does the opposite of mainstream financial advice. Contrarian by nature. If everyone is buying, selling. The inverse is the way.
+      - AGENT_STYLE=contrarian
+      - ARENA_API_URL=http://arena-api:3002
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+    networks:
+      - arena-network
+    depends_on:
+      - arena-api
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 10s
+      retries: 3

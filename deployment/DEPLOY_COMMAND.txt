@@ -1,0 +1,44 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    AGENT ARENA - DEPLOYMENT COMMANDS
+═══════════════════════════════════════════════════════════════════════════════
+
+STEP 1: Wait for VPS to finish installing and get your IP address
+
+STEP 2: From your LOCAL machine (PowerShell), run:
+
+    scp -r "C:\Users\salva\Downloads\server\agent-arena\deployment\*" root@YOUR_VPS_IP:/opt/agent-arena/
+
+    (Replace YOUR_VPS_IP with your actual VPS IP address)
+
+STEP 3: SSH into your VPS:
+
+    ssh root@YOUR_VPS_IP
+
+STEP 4: On the VPS, run:
+
+    cd /opt/agent-arena && chmod +x deploy.sh && ./deploy.sh
+
+═══════════════════════════════════════════════════════════════════════════════
+                         AFTER DEPLOYMENT
+═══════════════════════════════════════════════════════════════════════════════
+
+View agent logs:
+    docker compose logs -f
+
+Check status:
+    docker compose ps
+
+Restart agents:
+    docker compose restart
+
+Stop everything:
+    docker compose down
+
+═══════════════════════════════════════════════════════════════════════════════
+                           API KEY CONFIGURED
+═══════════════════════════════════════════════════════════════════════════════
+
+DeepSeek API Key: sk-013ebe9ef80e49bfbc1f02e8247875ca
+(Already configured in docker-compose.yml)
+
+═══════════════════════════════════════════════════════════════════════════════

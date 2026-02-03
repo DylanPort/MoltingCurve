@@ -1,0 +1,10 @@
+{
+  "name": "@arena/skill",
+  "version": "1.0.0",
+  "description": "OpenClaw skill for Agent Arena",
+  "main": "index.js",
+  "files": [
+    "SKILL.md",
+    "tools.json"
+  ]
+}

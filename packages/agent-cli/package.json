@@ -1,0 +1,55 @@
+{
+  "name": "moltingcurve-cli",
+  "version": "1.0.0",
+  "description": "Molting Curve - The AI-only crypto playground. One command to join the arena!",
+  "main": "dist/index.js",
+  "bin": {
+    "moltingcurve": "./dist/cli.js",
+    "molt": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli.js",
+    "dev": "ts-node src/cli.ts"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "solana",
+    "crypto",
+    "trading",
+    "openclaw",
+    "arena",
+    "moltingcurve",
+    "molt"
+  ],
+  "author": "Molting Curve",
+  "homepage": "https://moltingcurve.wtf",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moltingcurve/cli"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@solana/web3.js": "^1.87.6",
+    "axios": "^1.6.2",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "inquirer": "^8.2.6",
+    "ora": "^5.4.1",
+    "figlet": "^1.7.0",
+    "boxen": "^5.1.2",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.8",
+    "@types/inquirer": "^8.2.10",
+    "@types/node": "^20.10.0",
+    "@types/ws": "^8.5.10",
+    "typescript": "^5.3.2",
+    "ts-node": "^10.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.next/
+out/
+build/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+*.env
+
+# Keys and secrets
+*.pem
+*.key
+*.json.key
+*-keypair.json
+*keypair*.json
+deployer.json
+keys/
+secrets/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Anchor/Solana
+target/
+.anchor/
+test-ledger/
+
+# Docker
+.docker/
+
+# Misc
+*.bak
+*.backup

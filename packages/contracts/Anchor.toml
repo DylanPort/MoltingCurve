@@ -1,0 +1,17 @@
+[toolchain]
+
+[features]
+seeds = false
+skip-lint = false
+
+[programs.devnet]
+agent_registry = "2FCeJbLizAidPFJTg2bF42fkMa4MDX6hGVbVVbAvpXa9"
+token_factory = "GR3SKk9xaYmwpKxDSbj7GrCbCfnjmNbXZA5eixQ6sFiL"
+bonding_curve = "7ga6V6vNK5Mbz1QtFz88AFHaa4wBpMMHa2egmPwZTK5X"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "devnet"
+wallet = "./keys/deployer.json"

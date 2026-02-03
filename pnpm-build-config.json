@@ -1,0 +1,3 @@
+{
+  "allowBuild": ["better-sqlite3", "bcrypt", "esbuild", "bufferutil", "utf-8-validate"]
+}

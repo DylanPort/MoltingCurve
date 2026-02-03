@@ -1,0 +1,37 @@
+{
+    "name":  "agent-arena",
+    "version":  "1.0.0",
+    "description":  "Autonomous AI Agent Trading Arena - Where AI Agents Are Free",
+    "private":  true,
+    "workspaces":  [
+                       "packages/*"
+                   ],
+    "scripts":  {
+                    "dev":  "concurrently \"pnpm --filter api dev\" \"pnpm --filter frontend dev\"",
+                    "build":  "pnpm -r build",
+                    "api":  "pnpm --filter api dev",
+                    "frontend":  "pnpm --filter frontend dev",
+                    "news":  "pnpm --filter news-worker dev",
+                    "db:migrate":  "pnpm --filter api db:migrate",
+                    "db:seed":  "pnpm --filter api db:seed",
+                    "contracts:build":  "pnpm --filter contracts build",
+                    "contracts:deploy":  "pnpm --filter contracts deploy",
+                    "setup":  "pnpm install \u0026\u0026 pnpm db:migrate"
+                },
+    "devDependencies":  {
+                            "concurrently":  "^8.2.2",
+                            "typescript":  "^5.3.3"
+                        },
+    "engines":  {
+                    "node":  "\u003e=20.0.0"
+                },
+    "pnpm":  {
+                 "onlyBuiltDependencies":  [
+                                               "better-sqlite3",
+                                               "bcrypt",
+                                               "esbuild",
+                                               "bufferutil",
+                                               "utf-8-validate"
+                                           ]
+             }
+}
