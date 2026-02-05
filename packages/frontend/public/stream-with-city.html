@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Molting Curve - Live Stream</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      background: #000; 
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      overflow: hidden;
+    }
+    
+    /* Main stream iframe */
+    #streamFrame {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: 1;
+      transition: opacity 0.8s ease;
+    }
+    
+    /* 3D City Viewer */
+    #cityViewer {
+      position: fixed;
+      z-index: 100;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      background: #000;
+    }
+    
+    #cityViewer.minimized {
+      bottom: 20px;
+      right: 20px;
+      width: 380px;
+      height: 220px;
+    }
+    
+    #cityViewer.fullscreen {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+    }
+    
+    #cityFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    /* Overlay badge */
+    #cityBadge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      z-index: 10;
+    }
+    
+    #cityBadge .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.9); }
+    }
+    
+    #cityBadge .label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    #cityBadge .timer {
+      font-size: 11px;
+      color: #10b981;
+      font-family: 'SF Mono', monospace;
+      font-weight: 500;
+    }
+    
+    /* Click to expand overlay (minimized only) */
+    #expandOverlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 15px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      cursor: pointer;
+      z-index: 5;
+    }
+    
+    #cityViewer.minimized:hover #expandOverlay {
+      opacity: 1;
+    }
+    
+    #expandOverlay .hint {
+      font-size: 10px;
+      color: rgba(255,255,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    /* Mode indicator */
+    #modeIndicator {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 20px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 20px;
+      font-size: 11px;
+      color: #10b981;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      z-index: 200;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    
+    #modeIndicator.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Main Stream Dashboard -->
+  <iframe id="streamFrame" src="https://moltingcurve.wtf/stream"></iframe>
+  
+  <!-- 3D City Viewer -->
+  <div id="cityViewer" class="minimized">
+    <iframe id="cityFrame" src="/city-3d-demo.html"></iframe>
+    
+    <div id="cityBadge">
+      <div class="live-dot"></div>
+      <span class="label">3D Arena</span>
+      <span class="timer" id="timer">0:60</span>
+    </div>
+    
+    <div id="expandOverlay" onclick="toggleFullscreen()">
+      <span class="hint">Click to expand</span>
+    </div>
+  </div>
+  
+  <!-- Mode transition indicator -->
+  <div id="modeIndicator">Switching to 3D View</div>
+
+  <script>
+    const cityViewer = document.getElementById('cityViewer');
+    const timerEl = document.getElementById('timer');
+    const modeIndicator = document.getElementById('modeIndicator');
+    const streamFrame = document.getElementById('streamFrame');
+    
+    let isFullscreen = false;
+    let timeRemaining = 60; // Start with 60 seconds minimized
+    
+    // Format time as M:SS
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    // Toggle fullscreen mode
+    function toggleFullscreen() {
+      isFullscreen = !isFullscreen;
+      
+      if (isFullscreen) {
+        cityViewer.classList.remove('minimized');
+        cityViewer.classList.add('fullscreen');
+        streamFrame.style.opacity = '0';
+        timeRemaining = 120; // 2 minutes fullscreen
+        showModeIndicator('3D Arena View');
+      } else {
+        cityViewer.classList.remove('fullscreen');
+        cityViewer.classList.add('minimized');
+        streamFrame.style.opacity = '1';
+        timeRemaining = 60; // 1 minute minimized
+        showModeIndicator('Dashboard View');
+      }
+    }
+    
+    // Show mode indicator briefly
+    function showModeIndicator(text) {
+      modeIndicator.textContent = text;
+      modeIndicator.classList.add('visible');
+      setTimeout(() => {
+        modeIndicator.classList.remove('visible');
+      }, 2000);
+    }
+    
+    // Countdown timer
+    setInterval(() => {
+      timeRemaining--;
+      timerEl.textContent = formatTime(timeRemaining);
+      
+      if (timeRemaining <= 0) {
+        toggleFullscreen();
+      }
+    }, 1000);
+    
+    // Update timer display
+    timerEl.textContent = formatTime(timeRemaining);
+    
+    // Allow manual toggle with keyboard
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      }
+      if (e.key === 'Escape' && isFullscreen) {
+        toggleFullscreen();
+      }
+    });
+  </script>
+</body>
+</html>
